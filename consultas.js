@@ -9,7 +9,7 @@ const pool = new Pool({
   allowExitOnIdle: true,
 });
 
-const agregarUsuario = async (email, password, rol, lenguage) => {
+const agregar = async (email, password, rol, lenguage) => {
   const consultaId = "SELECT id FROM usuarios ORDER BY id DESC LIMIT 1";
   const insertarUsuario = "INSERT INTO usuarios VALUES ($1,$2,$3,$4,$5)";
   const usuarioExiste = "SELECT * FROM usuarios WHERE email = $1";
@@ -27,12 +27,12 @@ const agregarUsuario = async (email, password, rol, lenguage) => {
     }
     const datos = [id, email, password, rol, lenguage];
     await pool.query(insertarUsuario, datos);
-    console.log("usuario agregado");
-    return "Usuario Agregado";
+    console.log("Usuario Agregado Exitosamente");
+    return "Usuario Agregado Exitosamente";
   }
 };
 
-const verificarUsuario = async (email, password) => {
+const verificar = async (email, password) => {
   const consulta = "SELECT * FROM usuarios WHERE email = $1";
   const values = [email];
   const {
@@ -44,14 +44,14 @@ const verificarUsuario = async (email, password) => {
   if (!rowCount || !passwordEsCorrecta) {
     throw {
       code: 404,
-      message: "El usuario no esta registrado o la contraseña es incorrecta",
+      message: "Usuario no registrado, por ffavor verifique los datos",
     };
   }
   console.log("Usuario verificado");
   return "Usuario verificado";
 };
 
-const obtenerDatosUsuario = async (email) => {
+const obtenerData = async (email) => {
   const consultaUsuario = "SELECT * FROM usuarios WHERE email = $1";
   const values = [email];
   const {
@@ -61,4 +61,4 @@ const obtenerDatosUsuario = async (email) => {
   return { email: email, rol: rol, lenguage: lenguage };
 };
 
-module.exports = { agregarUsuario, verificarUsuario, obtenerDatosUsuario };
+module.exports = { agregar, verificar, obtenerData };
